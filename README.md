@@ -1,0 +1,1 @@
+This is a movie list application in React that displays a list of the highest-grossing movies, along with some more details and a poster for every movie. 
