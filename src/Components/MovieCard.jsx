@@ -16,7 +16,7 @@ export function MovieCard({ show }) {
         className="rounded-lg w-full"
       />
       <h3 className="font-semibold mt-2">{show.name}</h3>
-      <p className="text-sm"> {show.rating?.average || "N/A"}</p>
+      <p className="text-sm">⭐ {show.rating?.average || "N/A"}</p>
 
       <button
         onClick={(e) => {
@@ -26,7 +26,7 @@ export function MovieCard({ show }) {
         className="mt-2 text-sm"
       >
         <Show when={isFav} fallback="Favorite">
-          Favorited
+          ♥️ Favorited
         </Show>
       </button>
     </div>
