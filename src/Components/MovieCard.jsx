@@ -1,9 +1,5 @@
 import { useFavorites } from "../store/useFavourites";
 
-// function Show({ when, children, fallback = null }) {
-//   return when ? children : fallback;
-// }
-
 export function MovieCard({ show }) {
   const { favorites, toggle } = useFavorites();
   const isFav = favorites.some((f) => f.id === show.id);
@@ -21,17 +17,21 @@ export function MovieCard({ show }) {
       </div>
 
       <div className="mt-3 space-y-1">
-        <h3 className="font-medium text-[13px] leading-tight truncate text-white/90 group-hover:text-white">{show.name}</h3>
+        <h3 className="font-medium text-[13px] leading-tight truncate text-white/90 group-hover:text-white">
+          {show.name}
+        </h3>
         <div className="flex items-center justify-between">
-          <p className="text-xs text-white/40">⭐ {show.rating?.average || "N/A"}</p>
+          <p className="text-xs text-white/40">
+            ⭐ {show.rating?.average || "N/A"}
+          </p>
           <button
             onClick={(e) => {
               e.stopPropagation(); //prevents opening detail when clicking heart
               toggle(show);
             }}
-            className={`text-[11px] px-2.5 py-1 rounded-full transition-all ${isFav ? 'bg-white text-black' : 'bg-white/10 text-white/60 hover:bg-white/20 hover:text-white'}`}
+            className={`text-[11px] px-2.5 py-1 rounded-full transition-all ${isFav ? "bg-white text-black" : "bg-white/10 text-white/60 hover:bg-white/20 hover:text-white"}`}
           >
-            {isFav ? '❤️ Saved' : '🖤 Save'}
+            {isFav ? "❤️ Saved" : "🖤 Save"}
           </button>
         </div>
       </div>
