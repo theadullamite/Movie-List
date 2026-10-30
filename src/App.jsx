@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useShows } from "./hooks/useShows";
 import { MovieCard } from "./Components/MovieCard";
@@ -16,7 +16,15 @@ export default function App() {
 function MovieApp() {
   const { data, isLoading } = useShows();
   const [search, setSearch] = useState("");
-  const [selectId, setSelectId] = useState(null);
+  const [selectedId, setSelectedId] = useState(() => {
+    const saved = localStorage.getItem('cinema-selected-id')
+    return saved ? Number(saved) :null
+  });
+
+  useEffect(() => {
+    if (selectedId) localStorage.setItem('cinema-selected-id', selectedId)
+      else localStorage.removeItem('cinema-selected-id')
+  }, [selectedId])
 
   if (isLoading) {
     return (
@@ -29,21 +37,22 @@ function MovieApp() {
     );
   }
 
-  if (selectId) {
-    const show = data.find((s) => s.id === selectId);
+  if (selectedId) {
+    const show = data.find((s) => s.id === selectedId);
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white">
         <div className="max-w-5xl mx-auto p-6 md:p-10">
           <button
-            onClick={() => setSelectId(null)}
+            onClick={() => setSelectedId(null)}
             className="mb-8 text-sm text-white/60 hover:text-white flex items-center gap-2"
           >
             IJ Back to browse
           </button>
           <div className="grid md:grid-cols-[320px_1fr] gap-10">
             <img
-              src={show.image?.original}
+              src={show.image?.original || show.image?.medium || 'https://via.placeholder.com/600x900/1a1a1a/fff?text=No+Image'}
               className="rounded-2xl w-full shadow-2xl"
+              alt={show.name}
             />
             <div>
               <h1 className="text-4xl font-bold tracking-tight">{show.name}</h1>
@@ -93,7 +102,7 @@ function MovieApp() {
         <p className="text-white/40 text-sm mb-6">{filtered.length} shows | Click to view </p>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
           {filtered.slice(0, 40).map((show) => (
-            <div key={show.id} onClick={() => setSelectId(show.id)} className="cursor-pointer">
+            <div key={show.id} onClick={() => setSelectedId(show.id)} className="cursor-pointer">
               <MovieCard show={show} />
             </div>
           ))}
