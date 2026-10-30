@@ -14,17 +14,17 @@ export default function App() {
 }
 
 function MovieApp() {
-  const { data, isLoading } = useShows();
+  const { data = [], isLoading } = useShows();
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState(() => {
-    const saved = localStorage.getItem('cinema-selected-id')
-    return saved ? Number(saved) :null
+    const saved = localStorage.getItem("cinema-selected-id");
+    return saved ? Number(saved) : null;
   });
 
   useEffect(() => {
-    if (selectedId) localStorage.setItem('cinema-selected-id', selectedId)
-      else localStorage.removeItem('cinema-selected-id')
-  }, [selectedId])
+    if (selectedId) localStorage.setItem("cinema-selected-id", selectedId);
+    else localStorage.removeItem("cinema-selected-id");
+  }, [selectedId]);
 
   if (isLoading) {
     return (
@@ -50,7 +50,11 @@ function MovieApp() {
           </button>
           <div className="grid md:grid-cols-[320px_1fr] gap-10">
             <img
-              src={show.image?.original || show.image?.medium || 'https://via.placeholder.com/600x900/1a1a1a/fff?text=No+Image'}
+              src={
+                show.image?.original ||
+                show.image?.medium ||
+                "https://via.placeholder.com/600x900/1a1a1a/fff?text=No+Image"
+              }
               className="rounded-2xl w-full shadow-2xl"
               alt={show.name}
             />
@@ -87,7 +91,9 @@ function MovieApp() {
       {/* Header */}
       <header className="sticky top-0 z-10 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto p-4 md:p-6 flex justify-between items-center gap-4">
-          <h1 className="text-xl font-bold tracking-light">CINEMA <span className="font-light text-white/50">.io</span></h1>
+          <h1 className="text-xl font-bold tracking-light">
+            CINEMA <span className="font-light text-white/50">.io</span>
+          </h1>
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -99,14 +105,27 @@ function MovieApp() {
 
       {/* Grid */}
       <main className="max-w-7xl mx-auto p-4 md:p-6">
-        <p className="text-white/40 text-sm mb-6">{filtered.length} shows | Click to view </p>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-          {filtered.slice(0, 40).map((show) => (
-            <div key={show.id} onClick={() => setSelectedId(show.id)} className="cursor-pointer">
-              <MovieCard show={show} />
-            </div>
-          ))}
-        </div>
+        <p className="text-white/40 text-sm mb-6">
+          {filtered.length} shows {search && 'for "${search}"'}{" "}
+        </p>
+
+        {filtered.length === 0 ? (
+          <p className="text-center text-white/30 mt-20">
+            No shows found for "{search}"
+          </p>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+            {filtered.slice(0, 40).map((show) => (
+              <div
+                key={show.id}
+                onClick={() => setSelectedId(show.id)}
+                className="cursor-pointer"
+              >
+                <MovieCard show={show} />
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
